@@ -1,2 +1,87 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+  import Order from "../lib/Order.svelte";
+    $: id = 0
+    $: name=""
+    let orders = []
+    $: completedOrder = []
+    function addOrder() {
+        id += 1
+        orders = [...orders, {name:name, id:id}]
+        name = ""
+    }
+    function handleChange(e) {
+        orders = e.detail.orders
+    }
+</script>
+
+<div class="dashboard">
+    <div class="order">
+        <div class="create-order">
+            <h3>Give Order</h3>
+            <textarea bind:value={name}></textarea>
+            <button id="add-order" on:click={addOrder}>Add Order</button>
+        </div>
+    </div>
+    <div class="order-details">
+        <div class="pending">
+            <h3>Pending Orders</h3>
+            <ul>
+                {#each orders as order}
+                <li><Order name={order.name} id={order.id} bind:completedOrder={completedOrder} orders={orders} on:change={handleChange}/></li>
+                {/each}
+            </ul>
+        </div>
+        <div class="completed">
+            <h3>Completed Orders</h3>
+            <ul>
+                {#each completedOrder as completed_order}
+                <li><Order name={completed_order.name} id={completed_order.id}/></li>
+                {/each}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .order {
+        margin: 20px;
+        border: 1px black solid;
+        padding: 10px;
+        width: 400px;
+        height: 200px;
+    }
+    
+    .order-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin: 20px;
+    }
+
+    .pending, .completed {
+        border: 1px black solid;
+        margin: 4px;
+        width: 400px;
+        height: 100px;
+        overflow-y: scroll;
+    }
+
+    .create-order {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #add-order {
+        margin: 5px;
+    }
+</style>
