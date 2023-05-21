@@ -25,11 +25,9 @@
     <div class="order-details">
         <div class="pending">
             <h3>Pending Orders</h3>
-            <ul>
-                {#each orders as order}
-                <li><Order name={order.name} id={order.id} bind:completedOrder={completedOrder} orders={orders} on:change={handleChange}/></li>
-                {/each}
-            </ul>
+            {#each orders as order}
+            <Order name={order.name} id={order.id} bind:completedOrder={completedOrder} orders={orders} on:change={handleChange}/>
+            {/each}
         </div>
         <div class="completed">
             <h3>Completed Orders</h3>

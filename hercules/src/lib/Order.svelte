@@ -6,7 +6,6 @@
     export let orders;
     const dispatch = createEventDispatcher()
     function completeOrder() {
-        alert(id + " order was completed")
         completedOrder = [...completedOrder, {name: name, id: id}]
         for(let i=0; i<orders.length; i++) {
             if(orders[i].id == id && orders[i].name == name) {
@@ -18,4 +17,14 @@
     }
 </script>
 
-<button on:click={completeOrder}>ID: {id}, Name: {name}</button>
+<button class="order-item" on:click={completeOrder}>ID: {id}, Name: {name}</button>
+
+<style>
+    .order-item {
+        border: 0px black;
+        background-color: darkseagreen;
+        color: black;
+        margin: 2px;
+        border-radius: 10px;
+    }
+</style>
