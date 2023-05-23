@@ -41,14 +41,14 @@
     {:else if authState == "Login"}
         <label for="username">Username</label>
         <input id="username" name="username" type="text" bind:value={username}>
-        <label for="pwd">pwd</label>
+        <label for="pwd">Password</label>
         <input id="pwd" name="pwd" type="password" bind:value={pwd}>
-        <button id="login" on:click={login(username, pwd)}>Login</button>
+        <button id="login" on:click={login}>Login</button>
     {:else if authState == "Register"}
         <label for="username">Username</label>
         <input id="username" name="username" type="text" bind:value={username}>
         <label for="pwd">Password</label>
-        <input id="pwd" name="pwd" type="hidden" bind:value={pwd}>
+        <input id="pwd" name="pwd" type="password" bind:value={pwd}>
         <button id="login" on:click={register}>Register</button>
     {/if}
   </div>
@@ -74,7 +74,7 @@
     margin: 0;
   }
 
-  #login {
+  #login, #returning-user, #new-user {
     appearance: none;
     background-color: #fafbfc;
     border: 1px solid rgba(27, 31, 35, 0.15);
@@ -102,34 +102,45 @@
     word-wrap: break-word;
   }
 
-  #login:hover {
+  #login:hover, #returning-user:hover, #new-user:hover {
     background-color: #f3f4f6;
     text-decoration: none;
     transition-duration: 0.1s;
   }
 
-  #login:disabled {
+  #login:disabled, #returning-user:disabled, #new-user:disabled {
     background-color: #fafbfc;
     border-color: rgba(27, 31, 35, 0.15);
     color: #959da5;
     cursor: default;
   }
 
-  #login:active {
+  #login:active, #returning-user:active, #new-user:active {
     background-color: #edeff2;
     box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
     transition: none 0s;
   }
 
-  #login:focus {
+  #login:focus, #returning-user:focus, #new-user:focus {
     outline: 1px transparent;
   }
 
-  #login:before {
+  #login:before, #returning-user:before, #new-user:before {
     display: none;
   }
 
-  #login:-webkit-details-marker {
+  #login:-webkit-details-marker, #returning-user:-webkit-details-marker, #new-user:-webkit-details-marker {
     display: none;
+  }
+
+  #username, #pwd {
+    margin: 5px;
+    border-radius: 20px;
+    border: 0px solid;
+    padding: 10px;
+  }
+
+  #username:focus, #pwd:focus{
+    outline: none;
   }
 </style>
