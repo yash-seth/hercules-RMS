@@ -13,6 +13,7 @@
     }) .catch((err) => {
       console.log(err)
     })
+    goto("./dashboard", { state: { username: username } })
   }
   function register() {
     axios.post("http://localhost:5000/user/generateToken", {
@@ -23,6 +24,7 @@
     }) .catch((err) => {
       console.log(err)
     })
+    goto("./dashboard")
   }
 </script>
 
@@ -41,15 +43,13 @@
         <input id="username" name="username" type="text" bind:value={username}>
         <label for="pwd">pwd</label>
         <input id="pwd" name="pwd" type="password" bind:value={pwd}>
-        <button id="login" on:click={() => goto("./dashboard")}>Login</button>
-        <button id="login" on:click={login(username, pwd)}>Login JWT</button>
+        <button id="login" on:click={login(username, pwd)}>Login</button>
     {:else if authState == "Register"}
         <label for="username">Username</label>
         <input id="username" name="username" type="text" bind:value={username}>
         <label for="pwd">Password</label>
         <input id="pwd" name="pwd" type="hidden" bind:value={pwd}>
-        <button id="login" on:click={() => goto("./dashboard")}>Register</button>
-        <button id="login" on:click={register}>Register JWT</button>
+        <button id="login" on:click={register}>Register</button>
     {/if}
   </div>
 </body>

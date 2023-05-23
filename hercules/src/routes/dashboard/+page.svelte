@@ -2,10 +2,12 @@
     // imports
   import Order from "../../lib/Order.svelte";
   import { goto } from '$app/navigation'
+  import axios from 'axios'
     $: id = 0
     $: name=""
     let orders = []
     $: completedOrder = []
+    console.log(history.state.username)
     function addOrder() {
         id += 1
         orders = [...orders, {name:name, id:id}]
@@ -16,6 +18,16 @@
     }
     function clearCompletedList() {
         completedOrder = []
+    }
+    function logout() {
+      axios.post("http://localhost:5000/user/logout", {
+      "username":history.state.username,
+    }) .then((res) => {
+      console.log(res.data)
+    }) .catch((err) => {
+      console.log(err)
+    })
+    goto("./");
     }
 </script>
 
@@ -49,7 +61,7 @@
         </div>
     </div>
     <div>
-        <button on:click={() => goto("./")}>Back to Homepage</button>
+        <button on:click={logout}>Logout</button>
     </div>
 </div>
 
