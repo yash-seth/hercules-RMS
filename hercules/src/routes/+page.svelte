@@ -1,6 +1,29 @@
 <script>
   import { goto } from "$app/navigation";
+  import axios from 'axios'
   $: authState = "None";
+  $: username = ""
+  $: pwd = ""
+  function login() {
+    axios.post("http://localhost:5000/user/generateToken", {
+      "username":username,
+      "pwd":pwd
+    }) .then((res) => {
+      console.log(res.data)
+    }) .catch((err) => {
+      console.log(err)
+    })
+  }
+  function register() {
+    axios.post("http://localhost:5000/user/generateToken", {
+      "username":username,
+      "pwd":pwd
+    }) .then((res) => {
+      console.log(res.data)
+    }) .catch((err) => {
+      console.log(err)
+    })
+  }
 </script>
 
 <body style="margin: 0">
@@ -15,16 +38,18 @@
         <span></span>
     {:else if authState == "Login"}
         <label for="username">Username</label>
-        <input id="username" name="username" type="text">
+        <input id="username" name="username" type="text" bind:value={username}>
         <label for="pwd">pwd</label>
-        <input id="pwd" name="pwd" type="password">
+        <input id="pwd" name="pwd" type="password" bind:value={pwd}>
         <button id="login" on:click={() => goto("./dashboard")}>Login</button>
+        <button id="login" on:click={login(username, pwd)}>Login JWT</button>
     {:else if authState == "Register"}
         <label for="username">Username</label>
-        <input id="username" name="username" type="text">
+        <input id="username" name="username" type="text" bind:value={username}>
         <label for="pwd">Password</label>
-        <input id="pwd" name="pwd" type="hidden">
+        <input id="pwd" name="pwd" type="hidden" bind:value={pwd}>
         <button id="login" on:click={() => goto("./dashboard")}>Register</button>
+        <button id="login" on:click={register}>Register JWT</button>
     {/if}
   </div>
 </body>
