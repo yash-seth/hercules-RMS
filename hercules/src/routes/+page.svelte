@@ -5,7 +5,7 @@
 
 <body style="margin: 0">
   <div class="homepage">
-    <h1>Hercules Restaurant</h1>
+    <h1>Hercules Restaurant Management Dashboard</h1>
     <h4>Where efficiency is the food for success!</h4>
     <div class="form-control">
         <button id="returning-user" on:click={() => authState = "Login"}>Returning User ?</button>
