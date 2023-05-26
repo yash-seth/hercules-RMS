@@ -2,8 +2,17 @@ const express = require("express")
 const dotenv = require("dotenv")
 const jwt = require("jsonwebtoken")
 var CryptoJS = require("crypto-js");
+const mysql = require('mysql2')
 
 dotenv.config();
+
+// database part
+const pool = mysql.createPool({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
+}).promise()
 
 let userStore = {}
 
@@ -31,13 +40,19 @@ app.post("/user/generateToken", (req, res) => {
         username: req.body.username,
         pwd: req.body.pwd
     }
+
     let pwd = req.body.pwd
-    userStore[req.body.username] = {pwd: CryptoJS.AES.encrypt(process.env.SALT + pwd, process.env.HASHING_KEY).toString(), jwt: jwt.sign(data, jwtSecretKey)}
-    // // let data = {
-    // //     userID: 69
-    // // }
     const token = jwt.sign(data, jwtSecretKey)
-    console.log(userStore)
+    userStore[req.body.username] = {pwd: CryptoJS.AES.encrypt(process.env.SALT + pwd, process.env.HASHING_KEY).toString(), jwt: token}
+
+    new Promise(async function(resolve, reject) {
+        await pool.query("INSERT into USERS(username, pwd, jwt_token) values('" + req.body.username + "','" + CryptoJS.AES.encrypt(process.env.SALT + pwd, process.env.HASHING_KEY).toString() + "', '" + token + "')");
+        }).then(
+            console.log()
+        ).catch(
+            console.log
+        )
+
     res.send({token:token})
 });
 
@@ -67,6 +82,16 @@ app.post("/user/logout", (req, res) => {
     } catch(err) {
         console.log(err)
     }
-    console.log(userStore)
+
+    new Promise(async function(resolve, reject) {
+        const res = await pool.query("DELETE from USERS where username = '" + String(username) + "'");
+        console.log(res);
+        }).then(
+            (result) => console.log("Number of records deleted: " + result.affectedRows)
+        ).catch(
+            console.log
+        )
+
+    // console.log(userStore)
     res.send("User: " + username + " is logged out").status(200)
 });
