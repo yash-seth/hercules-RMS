@@ -1,7 +1,15 @@
 const mysql = require('mysql2')
 const dotenv = require('dotenv')
+const express = require('express')
+
+const db = express();
+
 
 dotenv.config()
+
+db.listen(process.env.DB_PORT, (req, res) => {
+    console.log("DB Server running on 7777");
+})
 
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
@@ -9,11 +17,6 @@ const pool = mysql.createPool({
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE
 }).promise()
-
-async function getUserDetails() {
-    const rows = await pool.query("SELECT * FROM USERS");
-    return rows[0]
-}
 
 new Promise(async function(resolve, reject) {
     const rows = await pool.query("SELECT * FROM USERS");
