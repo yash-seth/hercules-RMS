@@ -18,16 +18,30 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
-new Promise(async function(resolve, reject) {
-    const rows = await pool.query("SELECT * FROM USERS");
-    if(rows) {
-        resolve(rows[0]);
-    } else {
-        reject("Unable to fetch from database.")
-    }
-}).then(
-    (users) => console.log(users)
-).catch(
-    console.log
-)
 
+// fetch users from db
+
+// new Promise(async function(resolve, reject) {
+//     const rows = await pool.query("SELECT * FROM USERS");
+//     if(rows) {
+//         resolve(rows[0]);
+//     } else {
+//         reject("Unable to fetch from database.")
+//     }
+// }).then(
+//     (users) => console.log(users)
+// ).catch(
+//     console.log
+// )
+
+
+// delete user from db
+
+new Promise(async function(resolve, reject) {
+    const res = await pool.query("DELETE from USERS where username = 'harsh-seth'");
+    console.log(res);
+    }).then(
+        (result) => console.log("Number of records deleted: " + result.affectedRows)
+    ).catch(
+        console.log
+    )
