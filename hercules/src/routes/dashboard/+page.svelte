@@ -3,11 +3,19 @@
   import Order from "../../lib/Order.svelte";
   import { goto } from '$app/navigation'
   import axios from 'axios'
+  import { onMount } from 'svelte';
+
     $: id = 0
     $: name=""
     let orders = []
     $: completedOrder = []
-    console.log(history.state.username)
+
+	let username = "";
+
+	onMount(async () => {
+		username = history.state.username;
+	});
+
     function addOrder() {
         id += 1
         orders = [...orders, {name:name, id:id}]
@@ -19,6 +27,8 @@
     function clearCompletedList() {
         completedOrder = []
     }
+
+    // logout user
     async function logout() {
       await axios.post("http://localhost:5000/user/logout", {
       "username":history.state.username,
