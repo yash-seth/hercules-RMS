@@ -19,15 +19,18 @@
     function clearCompletedList() {
         completedOrder = []
     }
-    function logout() {
-      axios.post("http://localhost:5000/user/logout", {
+    async function logout() {
+      await axios.post("http://localhost:5000/user/logout", {
       "username":history.state.username,
     }) .then((res) => {
-      console.log(res.data)
+      if(!res.data.logout) {
+        alert(res.data.msg)
+      } else {
+          goto("./");
+      }
     }) .catch((err) => {
       console.log(err)
     })
-    goto("./");
     }
 </script>
 
