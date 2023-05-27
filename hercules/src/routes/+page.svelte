@@ -4,28 +4,38 @@
   $: authState = "None";
   $: username = ""
   $: pwd = ""
-  function login() {
-    axios.post("http://localhost:5000/user/generateToken", {
+
+  async function login() {
+    await axios.post("http://localhost:5000/user/login", {
       "username":username,
       "pwd":pwd
     }) .then((res) => {
-      console.log(res.data)
+      if(res.data.login) {
+        goto("./dashboard", {state: {username: username}})
+      }
+      else {
+        alert(res.data.msg)
+      }
     }) .catch((err) => {
       console.log(err)
     })
-    goto("./dashboard", { state: { username: username } })
   }
-  function register() {
-    axios.post("http://localhost:5000/user/generateToken", {
+
+  async function register() {
+    await axios.post("http://localhost:5000/user/register", {
       "username":username,
       "pwd":pwd
     }) .then((res) => {
-      console.log(res.data)
+      alert(res.data.msg);
+      authState = "None"
+      username = ""
+      pwd = ""
+      authState = "None"
     }) .catch((err) => {
       console.log(err)
     })
-    goto("./dashboard")
   }
+  
 </script>
 
 <body style="margin: 0">
