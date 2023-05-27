@@ -14,8 +14,6 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
-// let userStore = {}
-
 const app = express();
 
 const PORT = process.env.PORT
@@ -49,7 +47,6 @@ app.post("/user/login", async (req, res) => {
 
     let username = req.body.username;
     let pwd = CryptoJS.SHA3(process.env.SALT + req.body.pwd + process.env.SALT).toString()
-    // let pwd = CryptoJS.AES.encrypt(process.env.SALT + req.body.pwd, process.env.HASHING_KEY, { mode: CryptoJS.mode.ECB }).toString()
     const token = jwt.sign(data, jwtSecretKey)
 
     // adding user to db
@@ -74,7 +71,6 @@ app.post("/user/login", async (req, res) => {
 
 app.post("/user/register", async (req, res) => {
     let username = req.body.username;
-    // let pwd = CryptoJS.AES.encrypt(process.env.SALT + req.body.pwd, process.env.HASHING_KEY, { mode: CryptoJS.mode.ECB }).toString()
     let pwd = CryptoJS.SHA3(process.env.SALT + req.body.pwd + process.env.SALT).toString()
     let token = ""
 
