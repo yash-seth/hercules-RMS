@@ -15,16 +15,16 @@ A svelte-based restaurant orders management system, with an Express server for J
 
 ## Demo
 ### Homepage
-![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/dfa4bf49-6b3d-4e71-95a7-2c3d89e36244)
-      
+![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/57893513-faa3-4090-93f2-49d52fba3507)
+        
 ### Login Flow
-![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/e0b49e95-20dc-4646-a0d3-9b863e60f987)
+![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/28876aa9-0e45-4b88-991c-367f07b8fd3b)
       
 ### Register Flow
-![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/f542ac45-5705-402c-828e-8e3e47dc51d1)
+![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/872e32f2-7c1b-4c9f-bc9d-e35f230e65eb)
      
 ### Dashboard
-![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/b977f4e7-fe48-40ac-8ed8-957907eca256)
+![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/ab63d925-6829-4228-9fc7-2b0bb9766a2d)
      
 ### Orders in action
-![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/9876c2ed-84c7-4d88-8923-28858c965b85)
+![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/2085fde1-71b2-4e0b-9717-71d0ac510e14)
