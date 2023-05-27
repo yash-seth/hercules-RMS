@@ -14,47 +14,87 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
-let userStore = {}
+// let userStore = {}
 
 const app = express();
 
 const PORT = process.env.PORT
+
+// starting server
 app.listen(PORT, (req, res) => {
     console.log("Auth server is running on port 5000!");    
 })
 
+// cors settings
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
   });
 
+// default endpoint  
 app.use(express.json())
 app.get("/", (req, res) => {
     res.send("Welcome to the Hercules Restaurant!");
 })
 
-app.post("/user/generateToken", (req, res) => {
+// login endpoint
+
+app.post("/user/login", async (req, res) => {
     let jwtSecretKey = process.env.JWT_SECRET_KEY
     let data = {
         username: req.body.username,
         pwd: req.body.pwd
     }
 
-    let pwd = req.body.pwd
+    let username = req.body.username;
+    let pwd = CryptoJS.SHA3(process.env.SALT + req.body.pwd + process.env.SALT).toString()
+    // let pwd = CryptoJS.AES.encrypt(process.env.SALT + req.body.pwd, process.env.HASHING_KEY, { mode: CryptoJS.mode.ECB }).toString()
     const token = jwt.sign(data, jwtSecretKey)
-    userStore[req.body.username] = {pwd: CryptoJS.AES.encrypt(process.env.SALT + pwd, process.env.HASHING_KEY).toString(), jwt: token}
 
-    new Promise(async function(resolve, reject) {
-        await pool.query("INSERT into USERS(username, pwd, jwt_token) values('" + req.body.username + "','" + CryptoJS.AES.encrypt(process.env.SALT + pwd, process.env.HASHING_KEY).toString() + "', '" + token + "')");
-        }).then(
-            console.log()
-        ).catch(
-            console.log
-        )
-
-    res.send({token:token})
+    // adding user to db
+    const rows = await pool.query("SELECT pwd FROM USERS where username = '" + username + "'");
+    if(rows[0].length != 0) {
+        if(rows[0][0].pwd == pwd) {
+            try {
+                res.send({token:token, login: true})
+                await pool.query("UPDATE USERS SET jwt_token ='" + token + "' where username = '" + username + "'");
+            } catch (error) {
+                console.log("I was here");
+                res.send({msg: error, login: false})
+            }
+        }
+        else res.send({msg: "Password is incorrect", login: false})
+    } else {
+        res.send({msg: "Kindly register before trying to login.", login: false})
+    }
 });
+
+// register endpoint
+
+app.post("/user/register", async (req, res) => {
+    let username = req.body.username;
+    // let pwd = CryptoJS.AES.encrypt(process.env.SALT + req.body.pwd, process.env.HASHING_KEY, { mode: CryptoJS.mode.ECB }).toString()
+    let pwd = CryptoJS.SHA3(process.env.SALT + req.body.pwd + process.env.SALT).toString()
+    let token = ""
+
+    // checking if user is already in the db
+    try {
+        const rows = await pool.query("SELECT pwd FROM USERS where username = '" + username + "'");
+        if(rows[0].length != 0) {
+            res.send({msg: "User is already registered! Login to continue."})
+        }
+        else {
+            let t = await pool.query("INSERT into USERS(username, pwd, jwt_token) values('" + username + "','" + pwd + "', '" + token + "')");
+            if(t) res.send({msg: "User Registered, You may now login to continue"})
+            else res.send({msg: "Error registering user! Please try again"})
+        }
+        } catch (error) {
+            res.send({msg: "Error: " + error})
+        }
+});
+
+// validate jwt token endpoint
 
 app.get("/user/validateToken", (req, res) => {
     const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
@@ -75,23 +115,15 @@ app.get("/user/validateToken", (req, res) => {
     }
 });
 
-app.post("/user/logout", (req, res) => {
+// logout endpoint
+
+app.post("/user/logout", async (req, res) => {
     const username = req.body.username;
     try {
-        delete userStore[username]; 
+        const res = await pool.query("UPDATE USERS SET jwt_token = '' where username = '" + String(username) + "'");
     } catch(err) {
-        console.log(err)
+        res.send({msg: err, logout: false});
     }
 
-    new Promise(async function(resolve, reject) {
-        const res = await pool.query("DELETE from USERS where username = '" + String(username) + "'");
-        console.log(res);
-        }).then(
-            (result) => console.log("Number of records deleted: " + result.affectedRows)
-        ).catch(
-            console.log
-        )
-
-    // console.log(userStore)
-    res.send("User: " + username + " is logged out").status(200)
+    res.send({logout: true})
 });
