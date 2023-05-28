@@ -22,9 +22,9 @@
 <style>
     .order-item {
         border: 0px black;
-        background-color: darkseagreen;
+        background-color: rgb(135, 255, 135);
         color: black;
         margin: 2px;
-        border-radius: 10px;
+        border-radius: 20px;
     }
 </style>
