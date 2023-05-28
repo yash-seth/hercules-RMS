@@ -14,6 +14,9 @@ A svelte-based restaurant orders management system, with an Express server for J
 - SQL Database
 
 ## Demo
+Link: https://hercules-rms.vercel.app/
+> **_NOTE:_**  The auth currently disabled for demo purpose and you can access the tool functionality by going to the https://hercules-rms.vercel.app/dashboard URL.
+    
 ### Homepage
 ![image](https://github.com/yash-seth/hercules-RMS/assets/71393551/57893513-faa3-4090-93f2-49d52fba3507)
         
